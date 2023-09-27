@@ -20,6 +20,15 @@ const PriceRangeDropdown = () => {
       value: 'Price range (any)',
     },
     {
+      value: '20000 - 30000',
+    },
+    {
+      value: '30000 - 40000',
+    },
+    {
+      value: '50000 - 90000',
+    },
+    {
       value: '100000 - 130000',
     },
     {
@@ -30,12 +39,6 @@ const PriceRangeDropdown = () => {
     },
     {
       value: '190000 - 220000',
-    },
-    {
-      value: '20000 - 30000',
-    },
-    {
-      value: '30000 - 40000',
     },
   ];
 

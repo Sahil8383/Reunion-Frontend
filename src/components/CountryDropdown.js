@@ -8,7 +8,6 @@ import { HouseContext } from './HouseContext';
 
 const CountryDropdown = () => {
   const { country, setCountry, countries } = useContext(HouseContext);
-  console.log('Countries',countries);
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Menu as='div' className='dropdown relative'>

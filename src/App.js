@@ -6,7 +6,6 @@ import Header from './components/Header';
 
 // import pages
 import Home from './pages/Home';
-import PropertyDetails from './pages/PropertyDetails';
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/property/:id' element={<PropertyDetails />} />
       </Routes>
       <Footer />
     </div>

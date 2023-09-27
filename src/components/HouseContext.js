@@ -1,12 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-// import data
-import { housesData } from '../data';
-
-// create context
 export const HouseContext = createContext();
 
-// provider
 const HouseContextProvider = ({ children }) => {
   const [houses, setHouses] = useState([]);
   const [country, setCountry] = useState('Location (any)');
@@ -17,7 +12,6 @@ const HouseContextProvider = ({ children }) => {
   const [properties, setProperties] = useState([]);
   const [price, setPrice] = useState('Price range (any)');
   const [loading, setLoading] = useState(false);
-
 
   const getAllHouses = async () => {
     const response = await fetch('http://localhost:4000/api/list-properties');
@@ -55,91 +49,29 @@ const HouseContextProvider = ({ children }) => {
     getAllHouses();
   }, []);
 
-
-  const filterHouses = () => {
-    return houses.filter((house) => {
-      const housePrice = parseInt(house.price);
-      const minPrice = parseInt(price.split(' ')[0]);
-      const maxPrice = parseInt(price.split(' ')[2]);
-      return (
-        (house.country === 'Location (any)' || house.location === country) &&
-        (house.date === 'Start Date (any)' || house.date === date) &&
-        (house.property === 'Property type (any)' || house.type === property) &&
-        (house.price === 'Price range (any)' || (housePrice >= minPrice && housePrice <= maxPrice))
-      );
-    });
-  };
-
   const handleClick = () => {
-
     setLoading(true);
-
-    const isDefault = (str) => {
-      return str.split(' ').includes('(any)');
-    };
-
 
     const minPrice = parseInt(price.split(' ')[0]);
     const maxPrice = parseInt(price.split(' ')[2]);
 
-    const newHouses = houses.filter((house) => {
+    const filteredHouses = houses.filter((house) => {
       const housePrice = parseInt(house.price);
 
-      if (
-        house.location === country &&
-        house.type === property &&
-        housePrice >= minPrice &&
-        housePrice <= maxPrice
-      ) {
-        return house;
-      }
+      const locationFilter = house.location === country || country === 'Location (any)';
+      const dateFilter = house.date === date || date === 'Start Date (any)';
+      const propertyFilter = house.type === property || property === 'Property type (any)';
+      const priceFilter = housePrice >= minPrice && housePrice <= maxPrice || price === 'Price range (any)';
 
-      if (isDefault(country) && isDefault(property) && isDefault(price) && isDefault(date)) {
-        return house;
-      }
-
-      if (!isDefault(country) && isDefault(property) && isDefault(price) && isDefault(date)) {
-        return house.location === country;
-      }
-
-      if (isDefault(country) && isDefault(property) && isDefault(price) && !isDefault(date)) {
-        return house.date === date;
-      }
-
-      if (!isDefault(property) && isDefault(country) && isDefault(price) && isDefault(date)) {
-        return house.type === property;
-      }
-
-      if (!isDefault(price) && isDefault(country) && isDefault(property) && isDefault(date)) {
-        if (housePrice >= minPrice && housePrice <= maxPrice) {
-          return house;
-        }
-      }
-
-      if (!isDefault(country) && !isDefault(property) && isDefault(price) && isDefault(date)) {
-        return house.location === country && house.type === property;
-      }
-
-      if (!isDefault(country) && isDefault(property) && !isDefault(price) && isDefault(date)) {
-        if (housePrice >= minPrice && housePrice <= maxPrice) {
-          return house.location === country;
-        }
-      }
-
-      if (isDefault(country) && !isDefault(property) && !isDefault(price) && isDefault(date)) {
-        if (housePrice >= minPrice && housePrice <= maxPrice) {
-          return house.type === property;
-        }
-      }
-    }
-    );
+      return locationFilter && dateFilter && propertyFilter && priceFilter;
+    });
 
     setTimeout(() => {
       return (
-        newHouses.length < 1 ? setHouses([]) : setHouses(newHouses),
+        filteredHouses.length < 1 ? setHouses([]) : setHouses(filteredHouses),
         setLoading(false)
       );
-    }, 1000);
+    }, 1000);  
   };
 
   return (
