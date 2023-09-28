@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
 export const HouseContext = createContext();
+const URL = process.env.BASE_URL;
 
 const HouseContextProvider = ({ children }) => {
   const [houses, setHouses] = useState([]);
@@ -14,7 +15,7 @@ const HouseContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const getAllHouses = async () => {
-    const response = await fetch('http://localhost:4000/api/list-properties');
+    const response = await fetch(`https://reunionappbackend-mjtq.onrender.com/api/list-properties`);
     const data = await response.json();
     console.log(data.properties);
     setHouses(data.properties);
